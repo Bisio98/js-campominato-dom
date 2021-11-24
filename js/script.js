@@ -1,16 +1,20 @@
 document.getElementById('start').addEventListener('click', start);
 
 
-let numOfClicked = 0;
+let numOfClicked = [];
 let bombElements = [];
+let numOfBoxes;
+const bombs = 16;
+let attempts = 0;
+let attemptsH = document.getElementById('main_attempts');
 
 function start() {
+    attemptsH.classList.add('hide');
     const gameBox = document.getElementById('game_box');
     document.getElementById('box_game').innerHTML = "";
-
     let difficulty = document.getElementById("difficulty").value;
-    let numOfBoxes;
-    const bombs = 48;
+    
+    
 
     if(difficulty === 'Easy'){
         numOfBoxes = 100;
@@ -44,40 +48,39 @@ function start() {
         if(bombElements.includes[i]){
             divBox.classList.add('bomb');
         }
+        
+        attempts = numOfBoxes - bombs;
 
         divBox.addEventListener('click', clickedBox);
-        if(numOfClicked === (numOfBoxes - bombs)){
-            endGame('win');
-        }
     }
     
 }
 
 
 function clickedBox() {
-    for(let i = 0; i < (bombElements.length + 1); i++){
-        let tmp = parseInt(this.textContent);
-        if(bombElements[i] === tmp){
-            this.classList.add('bomb');
-            endGame('lost');
-            return;
-        }else{
-            this.classList.add('active');
-            numOfClicked++;
+    let tmp = parseInt(this.textContent);
+    if(bombElements.includes(tmp)){
+        this.classList.add('bomb');
+        endGame('lost');
+        return;
+    }else{
+        this.classList.add('active');
+        numOfClicked.push(tmp);
+        console.log(numOfClicked)
+        if(numOfClicked.length === attempts){
+            endGame('win');
         }
-    }    
+    }
 }
 
 function createBombs(num, max, myArray) {
-        let el;
-        el = createNumbers(max)
+    let el;
+    for(let i = 0; i < num; i++){
+        do{
+            el = createNumbers(max);
+        }while(myArray.includes(el))
         myArray.push(el);
-        for( let i = 1; i < num ; i++){
-            do{
-                el = Math.floor(Math.random() * max +1)
-            } while(!(myArray.includes(el)))
-            myArray.push(el);
-        }
+    }
     return myArray;
 }
 
@@ -86,5 +89,22 @@ function createNumbers(int) {
 }
 
 function endGame(goodOrBad){
-    console.log(goodOrBad);
+    if(goodOrBad === 'win'){
+        alert('HAI VINTO, CONGRATULAZIONI');
+    }else{
+        alert(`Mi spiace, hai perso, hai fatto ${numOfClicked.length} tentativi`);
+        let attemptsS = document.getElementById('attempts');
+        attemptsH.classList.remove('hide');
+        attemptsS.innerHTML = `${numOfClicked.length}`;
+    }
+    let allDivs = document.getElementsByClassName('single_box');
+    let thisDivBox = allDivs[0]
+    for( let i = 0; i < numOfBoxes; i++){
+        thisDivBox = allDivs[i]
+        thisDivBox.classList.add('disable');
+        if(bombElements.includes(i)){
+            thisDivBox.classList.add('bomb');
+        }
+    }
+
 }

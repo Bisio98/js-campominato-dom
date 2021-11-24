@@ -42,8 +42,8 @@ header .right *{
     position: relative;
     top: 125px;
     margin: auto;
-    width: 700px;
-    height: 700px;
+    width: 600px;
+    height: 600px;
     display: flex;
     flex-wrap: wrap;
 }
@@ -60,6 +60,20 @@ header .right *{
 .active{
     background-color: #6495ED;
     color: white;
+}
+
+main h2{
+    text-align: center;
+    position: relative;
+    top: 200px;
+}
+
+.hide{
+    display: none;
+}
+
+.disable{
+    pointer-events: none;
 }
 
 .bomb{
